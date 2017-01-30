@@ -1,0 +1,189 @@
+@font-face {
+    font-family: 'Tkachenko_Sketch';
+    src: url('../fonts/Tkachenko Sketch 4F.woff') format('woff'),
+         url('../fonts/Tkachenko Sketch 4F.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body
+{
+    background: url('../images/Background.png') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    font-family: 'Tkachenko_Sketch', sans-serif;
+    text-shadow: #000 1px 0, #000 1px 1px, #000 0 1px,
+                 #000 -1px 1px, #000 -1px 0, #000 -1px -1px,
+                 #000 0 -1px, #000 1px -1px, #000 0 0 3px,
+                 #000 0 0 3px, #000 0 0 3px, #000 0 0 3px,
+                 #000 0 0 3px, #000 0 0 3px, #000 0 0 3px, #000 0 0 3px;
+}
+
+main
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100vh;
+    margin: 0 100px;
+    font-size: 40px;
+}
+
+.boxes,
+.consist
+{
+    width: 15vw;
+}
+
+.set,
+.ingredients
+{
+    width: 25vw;
+}
+
+.boxes,
+.consist,
+.set,
+.ingredients
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 95%;
+}
+
+.consist img
+{
+    width: 100%;
+}
+
+.boxes img
+{
+    width: 80%;
+    margin: 20px 0;
+}
+
+ul
+{
+    list-style-type: none;
+    background-color: #fedab8;
+    border: 1px solid #5a5a5a;
+    margin: 0;
+    padding-left: 5px;
+    height: 65vh;
+    color: #0c63cc;
+    font-size: 1em;
+    text-shadow: none;
+}
+
+.reset-button,
+.pay-button,
+.cash-panel,
+.ingredient-button
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pay-button
+{
+    height: 8vh;
+    border: 1px solid #000;
+    color: #e80802;
+    font-size: 1.1em;
+    background: radial-gradient(#effb5b, #effb5b, #ee9b35);
+    margin: 5px 0;
+}
+
+.reset-button
+{
+    font-family: Arial, sans-serif;
+    font-size: 0.4em;
+    background-color: #810000;
+    height: 3vh;
+    margin: 5px 0;
+    color: #ffe62c;
+    border: 2px ridge #cbcbcb;
+    text-shadow: none;
+}
+
+.cash-panel
+{
+    height: 6vh;
+    margin: 25px 0 0;
+    background: radial-gradient(#c4fe5c, #c4fe5c, #fdff59);
+    border-bottom: 2px ridge #fff;
+    border-right: 2px ridge #fff;
+    box-shadow: inset 3px 3px 6px #6e6e6e;
+}
+
+.cash-panel div
+{
+    margin: 0 20px;
+    font-size: 0.8em;
+}
+
+.cash-panel div:nth-child(1)
+{
+    color: #50cacb;
+}
+
+.cash
+{
+    color: #30c60c;
+}
+
+.ingredient-button
+{
+    background: linear-gradient(to top, #e6d458, #c52728);
+    height: 5vh;
+    margin-bottom: 3px;
+    border: 1px solid #000;
+    color: #ffff67;
+    font-size: 0.8em;
+}
+
+h1
+{
+    font-size: 0.6em;
+    margin: 16px 0 5px 20px;
+    color: #ecea59;
+}
+
+.boxes img,
+.ingredient-button,
+.reset-button,
+.pay-button
+{
+    cursor: pointer;
+}
+
+.reset-button:active
+{
+    background-color: #4b0f05;
+}
+
+.ingredient-button:active
+{
+    background: linear-gradient(to bottom, #e6d458, #c52728);
+}
+
+.pay-button:active
+{
+    box-shadow: inset 0 0 6px #000;
+}
+
+@media screen and (min-width: 1650px) {
+    main
+    {
+        font-size: 55px;
+    }
+}
+
+@media screen and (min-width: 2500px) {
+    main
+    {
+        font-size: 80px;
+    }
+}
