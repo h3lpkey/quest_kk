@@ -27,13 +27,16 @@ const int TIMEEND   = 3600;
 json CONFIG; // настройки квеста, динамичный json файл
 
 // номера треков
-const int TREKMAIN  = 1;
-const int TREK5MIN  = 2;
-const int TREKWIN   = 3;
-const int TREKLOOSE = 4;
+const int TREKMAIN   = 1;
+const int TREK5MIN   = 2;
+const int TREKWIN    = 3;
+const int TREKLOOSE  = 4;
+const int TREKLEGEND = 8;
+
 
 // путь до конфига
 const string PATHJSON = "/var/www/qf2016.pro/config.json";
+const string PATHJSONBACKUP = "/var/www/qf2016.pro/flushConfig.json";
 
 void checkKassa() {
 
@@ -103,31 +106,22 @@ void checkKegi() {
     CONFIG["kegi"] = wiringPiI2CRead(fd);
 }
 
-void checkMusic() {
+void checkRecipe() {
 
     int fd = wiringPiI2CSetup(ADRMUSIC);
 
-    CONFIG["trek"] = wiringPiI2CRead(fd);
+    CONFIG["final"] = wiringPiI2CRead(fd);
 
-    if (CONFIG["trek"] == 3) {
-        CONFIG["status"] = "end";
+    if (CONFIG["final"] == 1) {
+        CONFIG["trek"] = TREKWIN;
     }
+}
 
-    if(CONFIG["now"] == 3300) {
-        wiringPiI2CWrite(fd, TREK5MIN);    
+void checkTrek() {
+
+    if (CONFIG["now"] > 45) {
+        CONFIG["trek"] = 1;
     }
-
-    if(CONFIG["now"] < CONFIG["end"]) {
-        wiringPiI2CWrite(fd, TREKMAIN);    
-    }
-
-    if (CONFIG["now"] > CONFIG["end"]) {
-        CONFIG["status"] = "end";
-        CONFIG["final"] = 1;
-        cout << "time is up! game end." << endl;
-        wiringPiI2CWrite(fd, TREKLOOSE);
-    }
-
 }
 
 // Перезапуск квеста
@@ -138,21 +132,29 @@ void flushGame() {
     CONFIG["plus"]   = TIMEPLUS;
     CONFIG["end"]    = TIMEEND;
     digitalWrite(FLUSHPIN, LOW);
-    delay(2000);
+    delay(6000);
     digitalWrite(FLUSHPIN, HIGH);
     cout << "game is " << CONFIG["status"] << endl;
 }
 
-// Берёс свежий конфиг игры
+// Берём свежий конфиг игры
 void getData () {
-    ifstream questConfig (PATHJSON);
-    questConfig >> CONFIG;      
+    ifstream questConfig(PATHJSON);
+
+    if(questConfig.tellg() == 0) {
+        cout << "pusto!";
+        ifstream questConfig(PATHJSONBACKUP);
+    }
+
+    questConfig >> CONFIG;
+    questConfig.close();
 }
 
 // Сохроняем изменения в конфиг
 void saveData () {
-    ofstream newfile(PATHJSON);
-    newfile << setw(4) << CONFIG << endl;
+    ofstream questConfig(PATHJSON);
+    questConfig << CONFIG << endl;
+    questConfig.close();
 }
 
 int main () {
@@ -174,8 +176,10 @@ int main () {
             CONFIG["start"] = TIMESTART;
             CONFIG["plus"]  = TIMEPLUS;
             CONFIG["end"]   = TIMEEND;
-
+            CONFIG["wheel"] = 0;
+            CONFIG["trek"]  = 8;
             CONFIG["status"] = "playing";
+            saveData();
 
             cout << "game start" << endl;
 
@@ -192,12 +196,17 @@ int main () {
                 checkCheeze();
                 checkLopatka();
                 checkKegi();
-                checkMusic();
+                checkTrek();
+                checkRecipe();
 
                 // добавляем +1 сек к времени
                 int timeGame = CONFIG["now"]; // TODO мб в одну строку?
                     timeGame++;
                     CONFIG["now"] = timeGame;
+
+                time_t timeWorld; 
+                    timeWorld = time (NULL);
+                    CONFIG["timeWorld"] = timeWorld;
 
                 // проверки на конец игры
                 if (CONFIG["status"] == "flush") {
@@ -217,7 +226,7 @@ int main () {
                 saveData();
                 delay(1000);
 
-            } while (CONFIG["status"] != "playing"); 
+            } while (CONFIG["status"] == "playing"); 
 
             CONFIG["status"] = "end";
             saveData();
@@ -227,7 +236,13 @@ int main () {
             flushGame();
             saveData();
         } else {
+            time_t  timeWorld; 
+                    timeWorld = time (NULL);
+                    CONFIG["timeWorld"] = timeWorld;
             cout << "go?" << endl;
+            cout << CONFIG["timeWorld"] << endl;
+            delay(100);
+            saveData();
         }
 
         delay(1000);

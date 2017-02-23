@@ -1,4 +1,8 @@
 <?php
+$connection = ssh2_connect('192.168.1.116', 22);
+ssh2_auth_password($connection, 'pi', 'raspberry');
+
+
 
 if(isset($_GET['button'])) {
 	$json = file_get_contents('../config.json');
@@ -22,8 +26,15 @@ if(isset($_GET['button'])) {
 			echo '<p class="text-warning">Сброс игры, статус: '.$json["status"].'</p>';
 			break;
 		case 'wheel':
-			$json["wheel"] = 1;
-			echo '<p class="text-success">Покрутил, решил, открыл окно '.$json['wheel'].' в '. $json["now"] .'</p>';
+			if ($json['wheel'] == 1) {
+				$json['wheel'] = 0;
+				echo '<p class="text-success">Отрубил питание на окно</p>';
+
+			} else {
+				$json['wheel'] = 1;
+				echo '<p class="text-success">Врубил питание на окно</p>';
+
+			}
 			break;
 		case 'kegi':
 			$json["kegi"] = 1;
@@ -51,7 +62,18 @@ if(isset($_GET['button'])) {
 			break;
 		case 'flush':
 			$json["plus"] = 0;
-			echo '<p class="text-warning">Сброс времени, вернуть bonus time в [0]';
+			echo '<p class="text-warning">Сброс времени, вернуть bonus time в [0]</p>';
+			break;
+		case 'startQuest_kk':
+			echo '<p class="text-warning">Запуская программу на сервере</p>';
+			shell_exec('sudo -S /var/www/qf2016.pro/quest_kk');
+			break;
+		case 'sound':
+			// $output1 = shell_exec('ssh pi@192.168.1.116 sudo -S killall omxplayer.bin');
+			// $output2 = shell_exec('ssh pi@192.168.1.116 /home/pi/kk_music');
+			$stream = ssh2_exec($connection, '/usr/local/bin/php -i');
+
+			echo '<p class="text-warning">Перезапускаю звук</p>';
 			break;
 		default:
 			echo '<p class="text-warning" >game ???</p>';

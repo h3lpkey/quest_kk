@@ -9,12 +9,11 @@
 <body>
     <main>
         <div class='boxes'>
-            <img src='images/box1.png' alt='Burger Meal' id='box1'>
-            <img src='images/box2.png' alt='Big Burger Meal' id='box2'>
-            <img src='images/box3.png' alt='Mega Burger Meal' id='box3'>
+            <img src='images/box1_no.png' alt='Burger Meal' id='box1'>
+            <img src='images/box2_no.png' alt='Big Burger Meal' id='box2'>
+            <img src='images/box3_no.png' alt='Mega Burger Meal' id='box3'>
         </div>
         <div class='consist'>
-            <img src='' id='paper'>
         </div>
         <div class='set'>
             <h1>Собрать:</h1>

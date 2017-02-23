@@ -26,6 +26,8 @@ int coins = 0; // счёт монет
 int correct = 0; // выполнена ли задача
 int full = 6; // сколько монет надо
 int right = 0; // от ложных срабатываний
+int ryadom = 0;
+int malo = 0;
 
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);
@@ -64,9 +66,24 @@ void loop(){
     Serial.println(uidDec);
     if(digitalRead(8) == HIGH) {
         right++;
+        Serial.println("right: ");
         Serial.println(right);
     } else {
         right = 0;
+    }
+    if(digitalRead(7) == HIGH) {
+        ryadom++;
+        Serial.println("ryadom: ");
+        Serial.println(ryadom);
+    } else {
+        ryadom = 0;
+    }
+    if(digitalRead(6) == HIGH) {
+        malo++;
+        Serial.println("malo: ");
+        Serial.println(malo);
+    } else {
+        malo = 0;
     }
     
 // --== MAGIC MIKHAEL EDITION ==--
@@ -93,15 +110,31 @@ void loop(){
     }
 // --== END MAGIC ==--
 
-    
+    if (malo >= 10) { // 10 20
+        lcd.setCursor(0, 0);
+        lcd.print("\x48\x65 \xB4\x61\xE3\x61\xB9       "); // ne gadai
+    }
+    if (ryadom >= 10) { // 10 20
+        lcd.setCursor(0, 0);
+        lcd.print("\x54\xC3 \x79\xB3\x65\x70\x65\xBD \x3F  "); // ti yveren &
+    }
+
+    if (uidDec == 3585441379 or uidDec == 878907323) { // 40 + 00
+        if (right >= 10 and correct == 0) {  
+        lcd.setCursor(0, 0);
+        lcd.print("\x42\x65\x70\xBD\xC3\xB9 \xBA\x79\x70\x63  "); // vernii kurs
+        }
+    }
     
     if (uidDec == 3585441379 or uidDec == 878907323) {
+        
+        
         if (right >= 10 and correct == 0 and coins >= 6) {  
         correct = 1;
         lcd.setCursor(0, 0);
-        lcd.print("    \x42\x6F\xB7\xC4\xBC\xB8\xBF\x65             ");
+        lcd.print("    \x42\x6F\xB7\xC4\xBC\xB8\xBF\x65             "); // vozmite
         lcd.setCursor(0, 1);
-        lcd.print("     \x4B\x79\xBE\xC6\x70\x79             ");
+        lcd.print("     \x4B\x79\xBE\xC6\x70\x79             "); // kypury
         Serial.println("activated");                            
         digitalWrite(7, HIGH);
         // Возмите купюру

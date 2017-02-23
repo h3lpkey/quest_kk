@@ -19,6 +19,8 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);
 unsigned long uidDec, uidDecTemp ;  // для храниения номера метки в десятичном формате
 void setup() {
   pinMode(4, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(7, OUTPUT);
   Serial.begin(9600);    // Initialize serial communications with the PC
   SPI.begin();  //  инициализация SPI / Init SPI bus.
   mfrc522.PCD_Init();     // инициализация MFRC522 / Init MFRC522 card.UT);
@@ -59,6 +61,22 @@ void loop(){
         delay(200);
     } else {
         digitalWrite(4, LOW);
+    }
+    
+    if (uidDec == 1159628387 || uidDec == 1514737851) {
+        Serial.println("malo");
+        digitalWrite(6, HIGH);
+        delay(200);
+    } else {
+        digitalWrite(6, LOW);
+    }
+    
+    if (uidDec == 2246149475 || uidDec == 3997568699) {
+        Serial.println("ryadom");
+        digitalWrite(7, HIGH);
+        delay(200);
+    } else {
+        digitalWrite(7, LOW);
     }
 
   Serial.println(uidDec);

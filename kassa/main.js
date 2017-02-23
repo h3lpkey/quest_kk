@@ -12,6 +12,9 @@ function Order(orderNow) {
 }
 
 $(document).ready(function(){
+
+$.ajaxSetup({ cache: false }); // вырубаем кэширование
+
 	var json;
 	orderNow = 0;
 	// ингредиенты
@@ -37,17 +40,23 @@ $(document).ready(function(){
 	
 	var rightBox = false;
 	rightOrder = '';
-	// обработка для боксов
+	// обработка для боксов Картинка рецепта - не нужна
 	$('#box1').click(function() {
-		$('#paper').attr('src', 'images/1.png');
+		$('#box1').attr('src', 'images/box1.png');
+		$('#box2').attr('src', 'images/box2_no.png');
+		$('#box3').attr('src', 'images/box3_no.png');
 		rightBox = true;
 	});
 	$('#box2').click(function() {
-		$('#paper').attr('src', 'images/2.png');
+		$('#box1').attr('src', 'images/box1_no.png');
+		$('#box2').attr('src', 'images/box2.png');
+		$('#box3').attr('src', 'images/box3_no.png');
 		rightBox = false;
 	});
 	$('#box3').click(function() {
-		$('#paper').attr('src', 'images/3.png');
+		$('#box1').attr('src', 'images/box1_no.png');
+		$('#box2').attr('src', 'images/box2_no.png');
+		$('#box3').attr('src', 'images/box3.png');
 		rightBox = false;
 	});
 		// обработка кнопок заказа
@@ -119,14 +128,14 @@ $(document).ready(function(){
 						rightOrder = '';
 					} else {
 						$('#orderBox').empty();
-						$('#orderBox').append('заказ не верен! :C');
+						$('#orderBox').append('а в меню по другому');
 						rightOrder = '';
 					}
 				}
 			} else {
 				if(box == '') {
 					$('#orderBox').empty();
-					$('#orderBox').append('не выбран бокс x)');
+					$('#orderBox').append('выбери Мил ');
 					rightOrder = '';
 				} else {
 					$('#orderBox').empty();
@@ -136,7 +145,7 @@ $(document).ready(function(){
 			}
 		} else {
 			$('#orderBox').empty();
-			$('#orderBox').append('а бабки в кассу?');
+			$('#orderBox').append('платить будем?');
 			rightOrder = '';
 		}
 	});
