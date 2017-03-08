@@ -1,6 +1,19 @@
 <?php
-$connection = ssh2_connect('192.168.1.116', 22);
-ssh2_auth_password($connection, 'pi', 'raspberry');
+
+include 'vendor/autoload.php';
+
+$loader = new \Composer\Autoload\ClassLoader();
+$loader->addPsr4('phpseclib\\', __DIR__ . '/path/to/phpseclib2.0');
+$loader->register();
+
+use phpseclib\Crypt\RSA;
+use phpseclib\Net\SSH2;
+
+$ssh = new SSH2('192.168.1.116');
+if (!$ssh->login('pi', '123')) {
+    exit('Login Failed');
+}
+
 
 
 
@@ -12,7 +25,8 @@ if(isset($_GET['button'])) {
 	switch ($_GET['button']) {
 		case 'start':
 			$json['status'] = 'starting';
-
+			// echo $ssh->exec('killall omxplayer');
+			echo $ssh->exec('omxplayer -o local /home/pi/backup_music/KK_legend.wav &');
 			echo '<p  class="text-warning">Запускаю игру, статус: '.$json['status'].'</p>';
 			break;
 		case 'pause':
@@ -24,6 +38,13 @@ if(isset($_GET['button'])) {
 			$json = file_get_contents('../flushConfig.json');
 			$json = json_decode($json, true);
 			echo '<p class="text-warning">Сброс игры, статус: '.$json["status"].'</p>';
+			// Domain can be an IP too
+			echo '<p class="text-warning">Загрузка треков</p>';
+			echo $ssh->exec('killall omxplayer');
+			echo $ssh->exec('rm -rf KK_*');
+			echo $ssh->exec('cp -rf /home/pi/backup_music/* /home/pi/');
+			echo $ssh->exec('omxplayer -o local /home/pi/backup_music/KK_main.mp3 &');
+			echo '<p class="text-warning">Загрузка зевершена</p>';			
 			break;
 		case 'wheel':
 			if ($json['wheel'] == 1) {
@@ -33,7 +54,6 @@ if(isset($_GET['button'])) {
 			} else {
 				$json['wheel'] = 1;
 				echo '<p class="text-success">Врубил питание на окно</p>';
-
 			}
 			break;
 		case 'kegi':
@@ -69,11 +89,22 @@ if(isset($_GET['button'])) {
 			shell_exec('sudo -S /var/www/qf2016.pro/quest_kk');
 			break;
 		case 'sound':
-			// $output1 = shell_exec('ssh pi@192.168.1.116 sudo -S killall omxplayer.bin');
-			// $output2 = shell_exec('ssh pi@192.168.1.116 /home/pi/kk_music');
-			$stream = ssh2_exec($connection, '/usr/local/bin/php -i');
-
+			echo $ssh->exec('sudo killall omxplayer');
+			// echo $ssh->exec('/home/pi/kk_music');
 			echo '<p class="text-warning">Перезапускаю звук</p>';
+			break;
+		case 'legenda':
+			// Domain can be an IP too
+			echo $ssh->exec('killall omxplayer');
+			echo $ssh->exec('omxplayer -o local /home/pi/KK_win.mp3 &');
+			echo '<p class="text-warning">TREK: финал</p>';
+			break;
+		case 'main':
+			// Domain can be an IP too
+			
+			echo $ssh->exec('killall omxplayer');
+			echo $ssh->exec('omxplayer -o local /home/pi/KK_main.mp3 &');
+			echo '<p class="text-warning">TREK: главный</p>';
 			break;
 		default:
 			echo '<p class="text-warning" >game ???</p>';

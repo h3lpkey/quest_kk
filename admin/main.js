@@ -13,7 +13,8 @@ function buttonConfig(button) {
 
 $(document).ready(function() {
 	$.ajaxSetup({ cache: false }); // вырубаем кэширование
-
+	var main = 0;
+	var trek = 'main';
 	setInterval(function() {
 		$.getJSON( "../config.json", function( data ) {
 			// обновление кнопок
@@ -53,6 +54,17 @@ $(document).ready(function() {
 			$('#time h1').append(min+':'+sec);
 			$('#time footer').empty();
 			$('#time footer').append('доп время ' + data.plus);
+
+			if (data.trek == 8) {
+				trek = 'legenda';
+				buttonConfig(trek);
+				main = 0;
+			}
+			if (data.trek == 1 && main == 0) {
+				main = 1;
+				console.log('main trek');
+				buttonConfig(trek);
+			} 
 		});
 	}, 1000);
 

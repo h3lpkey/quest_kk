@@ -24,6 +24,7 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 
 int main(void)
 {
+cout << "music programm start" << endl;
   for(;;) {
     CURL *curl;
     CURLcode res;
@@ -47,23 +48,23 @@ int main(void)
 
         switch (trek) {
             case 1 :
-                cout << "trek 1" << endl;
+                cout << "TREK: main" << endl;
                 system("omxplayer -o local --vol 600 KK_main.mp3 &");
                 break;
             case 2 :
-                cout << "trek 2" << endl;
+                cout << "TREK: 5 min" << endl;
                 system("omxplayer -o local --vol 800 KK_5min.mp3 &");
                 break;
             case 3 :
-                cout << "trek 3" << endl;
+                cout << "TREK: win" << endl;
                 system("omxplayer -o local KK_win.mp3 &");
                 break;
             case 4 :
-                cout << "trek 4" << endl;
+                cout << "TREK: loose" << endl;
                 system("omxplayer -o local --vol 800 KK_loose.mp3 &");
                 break;
             case 8 :
-                cout << "trek 8" << endl;
+                cout << "TREK: legend" << endl;
                 system("omxplayer -o local --vol 750 KK_legend.wav &");
                 break;
         } 
@@ -71,7 +72,7 @@ int main(void)
 
 
 
-    sleep(5); // 1 секунда
+    sleep(1); // 1 секунда
 
   }
   
